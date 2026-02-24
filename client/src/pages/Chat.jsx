@@ -25,7 +25,7 @@ export default function Chat() {
   }, [roomId]);
 
   useEffect(() => {
-    const url = import.meta.env.DEV ? 'http://localhost:3001' : '';
+    const url = import.meta.env.DEV ? 'http://localhost:3001' : window.location.origin;
     const s = io(url);
     setSocket(s);
     return () => s?.disconnect();

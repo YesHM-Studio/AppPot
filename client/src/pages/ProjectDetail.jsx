@@ -68,7 +68,7 @@ export default function ProjectDetail() {
         <div className="files">
           <strong>첨부파일:</strong>
           {project.files.map((f) => (
-            <a key={f.id} href={`http://localhost:3001${f.url}`} target="_blank" rel="noreferrer">{f.filename}</a>
+            <a key={f.id} href={f.url} target="_blank" rel="noreferrer">{f.filename}</a>
           ))}
         </div>
       )}

@@ -1,24 +1,101 @@
 .sellers-page h1 {
   margin-bottom: 24px;
+  font-size: 1.4rem;
+}
+
+.sellers-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+}
+
+.sellers-sidebar {
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.sellers-sidebar h4 {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sellers-sidebar ul {
+  list-style: none;
+}
+
+.sellers-sidebar li button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sellers-sidebar li button:hover {
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+
+.sellers-sidebar li button.active {
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.sellers-main {
+  min-width: 0;
+}
+
+.sellers-main .filter-strip {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sellers-main .filter-strip select {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.sort-label {
+  font-size: 0.85rem;
+  color: var(--text-light);
 }
 
 .seller-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
 }
 
 .seller-card {
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 16px;
+  padding: 28px;
   text-align: center;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: var(--card-shadow);
 }
 
 .seller-card:hover {
   border-color: var(--primary);
+  box-shadow: 0 8px 24px rgba(79,195,247,0.15);
 }
 
 .avatar {
@@ -49,4 +126,19 @@
 .seller-card .rating {
   font-size: 0.8rem;
   color: var(--text-light);
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-light);
+  padding: 48px;
+}
+
+@media (max-width: 768px) {
+  .sellers-layout {
+    grid-template-columns: 1fr;
+  }
+  .sellers-sidebar {
+    position: static;
+  }
 }

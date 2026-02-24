@@ -5,19 +5,30 @@
 .profile-card {
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: 16px;
+  padding: 28px;
   margin-bottom: 32px;
+  box-shadow: var(--card-shadow);
 }
 
 .profile-card .role {
   display: inline-block;
   margin-top: 8px;
-  padding: 4px 12px;
+  padding: 6px 14px;
   background: var(--primary-bg);
   color: var(--primary);
-  border-radius: 6px;
+  border-radius: 20px;
   font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.portfolio-form button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  font-weight: 500;
 }
 
 .mypage section {
@@ -44,10 +55,3 @@
   border-radius: 8px;
 }
 
-.portfolio-form button {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-}

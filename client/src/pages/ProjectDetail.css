@@ -8,11 +8,12 @@
 
 .detail-header .status {
   display: inline-block;
-  padding: 4px 10px;
-  background: var(--primary-bg);
-  color: var(--primary);
-  border-radius: 6px;
+  padding: 6px 14px;
+  background: var(--accent);
+  color: white;
+  border-radius: 20px;
   font-size: 0.8rem;
+  font-weight: 500;
   margin-bottom: 8px;
 }
 
@@ -87,9 +88,9 @@
 }
 
 .btn-accept {
-  background: var(--primary) !important;
+  background: var(--accent) !important;
   color: white !important;
-  border-color: var(--primary) !important;
+  border-color: var(--accent) !important;
 }
 
 .loading {

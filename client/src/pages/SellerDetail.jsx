@@ -28,7 +28,7 @@ export default function SellerDetail() {
       <div className="portfolio-grid">
         {seller.portfolios?.map((p) => (
           <div key={p.id} className="portfolio-item">
-            {p.image_url && <img src={`http://localhost:3001${p.image_url}`} alt={p.title} />}
+            {p.image_url && <img src={p.image_url} alt={p.title} />}
             <h4>{p.title}</h4>
             {p.description && <p>{p.description}</p>}
           </div>

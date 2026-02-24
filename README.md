@@ -29,6 +29,14 @@ npm run dev
 - 프론트엔드: http://localhost:5173
 - 백엔드 API: http://localhost:3001
 
+**프로덕션 실행 (로컬):**
+```bash
+npm run build && npm run start:local
+```
+- http://localhost:5000 에서 프론트+백엔드 동시 실행
+
+**Render 배포:** [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) 참고
+
 ## 기본 계정
 
 | 구분 | 이메일 | 비밀번호 |

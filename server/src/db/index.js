@@ -24,8 +24,18 @@ async function init() {
   }
 }
 
+let saveTimer = null;
 function save() {
-  if (db) fs.writeFileSync(dbPath, Buffer.from(db.export()));
+  if (!db) return;
+  if (saveTimer) return; // 디바운스
+  saveTimer = setImmediate(() => {
+    saveTimer = null;
+    try {
+      fs.writeFileSync(dbPath, Buffer.from(db.export()));
+    } catch (e) {
+      console.error('DB save error:', e.message);
+    }
+  });
 }
 
 function prepare(sql) {

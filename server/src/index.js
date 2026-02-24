@@ -34,6 +34,8 @@ if (!adminExists) {
 
 const app = express();
 const httpServer = createServer(app);
+httpServer.keepAliveTimeout = 65000;
+httpServer.headersTimeout = 66000;
 const io = new Server(httpServer, { cors: { origin: '*' } });
 
 app.use(cors());
@@ -50,12 +52,25 @@ app.use('/api/chat', chatRoutes);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
+// Express 라우트 에러 핸들러
+app.use((err, req, res, next) => {
+  console.error('Route error:', err.message);
+  res.status(500).json({ error: '서버 오류가 발생했습니다.' });
+});
+
 // 프로덕션: server/public (빌드 시 client/dist 복사됨) - __dirname 기준으로 항상 찾음
 const staticDir = path.join(__dirname, '../public');
 if (fs.existsSync(staticDir)) {
   console.log('✅ Static files from:', staticDir);
-  app.use(express.static(staticDir));
+  app.use(express.static(staticDir, {
+    index: false,
+    maxAge: '1y',
+    etag: true,
+    lastModified: true,
+  }));
   app.get('*', (req, res) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.set('Pragma', 'no-cache');
     res.sendFile(path.join(staticDir, 'index.html'), (err) => {
       if (err) res.status(500).send('Error loading app');
     });
@@ -77,7 +92,28 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 3001;
-httpServer.listen(PORT, () => {
-  console.log(`✅ AppPot 서버 실행: http://localhost:${PORT}`);
+// 글로벌 에러 핸들러 - 크래시 방지
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err.message);
 });
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection:', reason);
+});
+
+const PORT = parseInt(process.env.PORT || '3001', 10);
+
+function tryListen(port) {
+  httpServer.listen(port)
+    .on('listening', () => console.log(`✅ AppPot 서버 실행: http://localhost:${port}`))
+    .on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.warn(`⚠️ 포트 ${port} 사용 중. ${port + 1}번으로 재시도...`);
+        tryListen(port + 1);
+      } else {
+        throw err;
+      }
+    });
+}
+
+tryListen(PORT);
