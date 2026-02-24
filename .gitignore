@@ -3,5 +3,6 @@ dist/
 public/
 server/data/
 server/uploads/
+server/public/
 .env
 .DS_Store

@@ -50,32 +50,19 @@ app.use('/api/chat', chatRoutes);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
-// 프로덕션: React 빌드 제공 (빌드 시 client/dist → public/ 으로 이동)
-const possiblePaths = [
-  path.join(process.cwd(), 'public'),
-  path.join(process.cwd(), 'client', 'dist'),
-  path.join(__dirname, '../../public'),
-  path.join(__dirname, '../../client/dist'),
-];
-const clientDist = possiblePaths.find((p) => fs.existsSync(p));
-if (clientDist) {
-  console.log('✅ Static files from:', clientDist);
-  app.use(express.static(clientDist));
+// 프로덕션: server/public (빌드 시 client/dist 복사됨) - __dirname 기준으로 항상 찾음
+const staticDir = path.join(__dirname, '../public');
+if (fs.existsSync(staticDir)) {
+  console.log('✅ Static files from:', staticDir);
+  app.use(express.static(staticDir));
   app.get('*', (req, res) => {
-    res.sendFile(path.join(clientDist, 'index.html'), (err) => {
+    res.sendFile(path.join(staticDir, 'index.html'), (err) => {
       if (err) res.status(500).send('Error loading app');
     });
   });
 } else {
-  app.get('/', (req, res) => {
-    res.send(`
-      <h1>AppPot</h1>
-      <p>client/dist not found. Paths tried:</p>
-      <pre>${possiblePaths.join('\n')}</pre>
-      <p>cwd: ${process.cwd()}</p>
-    `);
-  });
-  console.warn('⚠️ client/dist not found. Paths:', possiblePaths, 'cwd:', process.cwd());
+  app.get('/', (req, res) => res.send(`<h1>AppPot</h1><p>Build needed. staticDir: ${staticDir}</p>`));
+  console.warn('⚠️ server/public not found at:', staticDir);
 }
 
 // Socket.io Chat

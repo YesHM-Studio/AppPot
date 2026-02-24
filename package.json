@@ -8,7 +8,7 @@
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "build": "cd client && npm run build && mv dist ../public",
+    "build": "cd client && npm run build && cp -r dist ../server/public",
     "start": "node server/src/index.js"
   },
   "devDependencies": {
