@@ -2,7 +2,18 @@
 
 크몽 스타일의 의뢰자-판매자 연결 플랫폼입니다.
 
-## 실행 방법
+## 🌐 사이트 배포 (Render)
+
+1. [Render](https://render.com) 가입 → **New** → **Web Service**
+2. GitHub 저장소 연결 후 **AppPot** 선택
+3. 설정:
+   - **Build Command:** `npm run install:all && npm run build`
+   - **Start Command:** `npm start`
+   - **Root Directory:** (비워두기)
+4. **Create Web Service** 클릭
+5. 배포 완료 후 생성된 URL로 접속 (예: `https://apppot-xxxx.onrender.com`)
+
+## 로컬 실행 방법
 
 ```bash
 # 1. 의존성 설치
