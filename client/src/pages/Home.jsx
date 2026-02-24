@@ -2,14 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Home.css';
+import imgWeb from '../assets/images/review-web-result.png';
+import imgPg from '../assets/images/review-pg-result.png';
+import imgApp from '../assets/images/review-app-result.png';
+import imgDesign from '../assets/images/review-design-result.png';
+import imgMarketing from '../assets/images/review-marketing-result.png';
+import imgChatbot from '../assets/images/review-chatbot-result.png';
 
 const REVIEWS = [
-  { name: '김*민', rating: 5, text: '30일 만에 웹 로그인·결제까지 모두 완료했어요. 생각보다 훨씬 빨라서 놀랐습니다!', project: '웹 개발', face: 'smile', image: '/images/review-web-result.png' },
-  { name: '이*현', rating: 5, text: 'PG 연동 처음인데 법인 맞춤으로 수수료도 잘 봐주시고, 설명이 친절했습니다.', project: 'PG 연동', face: 'wink', image: '/images/review-pg-result.png' },
-  { name: '박*수', rating: 5, text: '첫 견적 30% 할인 받고 의뢰했는데, 품질도 만족스럽고 가격 대비 최고예요.', project: '앱 개발', face: 'grin', image: '/images/review-app-result.png' },
-  { name: '최*영', rating: 5, text: '브랜드 로고랑 네이밍까지 같이 받았는데 퀄리티가 정말 좋아요. 카페 오픈 준비 완료!', project: '디자인', face: 'smile', image: '/images/review-design-result.png' },
-  { name: '정*훈', rating: 5, text: '인스타그램 마케팅 의뢰했는데 팔로워 2배 늘었어요. 타겟 설정이 정말 신경 써주시더라구요.', project: '마케팅', face: 'grin', image: '/images/review-marketing-result.png' },
-  { name: '한*지', rating: 5, text: '고객 상담 챗봇 구축했는데 응답 속도랑 답변 품질 다 만족스러워요. 영업 효율이 확 올랐어요.', project: '챗봇 개발', face: 'wink', image: '/images/review-chatbot-result.png' },
+  { name: '김*민', rating: 5, text: '30일 만에 웹 로그인·결제까지 모두 완료했어요. 생각보다 훨씬 빨라서 놀랐습니다!', project: '웹 개발', face: 'smile', image: imgWeb },
+  { name: '이*현', rating: 5, text: 'PG 연동 처음인데 법인 맞춤으로 수수료도 잘 봐주시고, 설명이 친절했습니다.', project: 'PG 연동', face: 'wink', image: imgPg },
+  { name: '박*수', rating: 5, text: '첫 견적 30% 할인 받고 의뢰했는데, 품질도 만족스럽고 가격 대비 최고예요.', project: '앱 개발', face: 'grin', image: imgApp },
+  { name: '최*영', rating: 5, text: '브랜드 로고랑 네이밍까지 같이 받았는데 퀄리티가 정말 좋아요. 카페 오픈 준비 완료!', project: '디자인', face: 'smile', image: imgDesign },
+  { name: '정*훈', rating: 5, text: '인스타그램 마케팅 의뢰했는데 팔로워 2배 늘었어요. 타겟 설정이 정말 신경 써주시더라구요.', project: '마케팅', face: 'grin', image: imgMarketing },
+  { name: '한*지', rating: 5, text: '고객 상담 챗봇 구축했는데 응답 속도랑 답변 품질 다 만족스러워요. 영업 효율이 확 올랐어요.', project: '챗봇 개발', face: 'wink', image: imgChatbot },
 ];
 const REPEAT_COUNT = 20;
 const REVIEWS_TRACK = Array(REPEAT_COUNT).fill(null).flatMap(() => REVIEWS);
