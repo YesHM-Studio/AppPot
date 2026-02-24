@@ -50,11 +50,12 @@ app.use('/api/chat', chatRoutes);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
-// 프로덕션: React 빌드 제공 (루트에서 실행 시 process.cwd() = 프로젝트 루트)
+// 프로덕션: React 빌드 제공 (빌드 시 client/dist → public/ 으로 이동)
 const possiblePaths = [
+  path.join(process.cwd(), 'public'),
   path.join(process.cwd(), 'client', 'dist'),
+  path.join(__dirname, '../../public'),
   path.join(__dirname, '../../client/dist'),
-  path.join(process.cwd(), '..', 'client', 'dist'),
 ];
 const clientDist = possiblePaths.find((p) => fs.existsSync(p));
 if (clientDist) {
