@@ -1,0 +1,80 @@
+.projects-page {
+  padding-bottom: 48px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-size: 1.5rem;
+}
+
+.filter-bar {
+  margin-bottom: 24px;
+}
+
+.filter-bar select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.project-card:hover {
+  border-color: var(--primary);
+}
+
+.status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 6px;
+}
+
+.project-card h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.project-card .meta {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.project-card .budget {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-light);
+  padding: 48px;
+}

@@ -1,0 +1,53 @@
+.mypage h1 {
+  margin-bottom: 24px;
+}
+
+.profile-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.profile-card .role {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.mypage section {
+  margin-bottom: 32px;
+}
+
+.mypage section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.portfolio-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.portfolio-form input,
+.portfolio-form textarea,
+.portfolio-form select {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.portfolio-form button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+}

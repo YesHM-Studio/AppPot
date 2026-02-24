@@ -1,0 +1,98 @@
+.project-detail {
+  max-width: 720px;
+}
+
+.detail-header {
+  margin-bottom: 24px;
+}
+
+.detail-header .status {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.detail-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.detail-header .meta {
+  color: var(--text-light);
+}
+
+.description {
+  margin: 24px 0;
+  white-space: pre-wrap;
+}
+
+.files {
+  margin-bottom: 24px;
+}
+
+.files a {
+  display: block;
+  color: var(--primary);
+}
+
+.estimates-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.estimates-section h2 {
+  margin-bottom: 16px;
+}
+
+.estimate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.estimate-form input,
+.estimate-form textarea {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.estimate-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.estimate-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.estimate-actions button {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 6px;
+}
+
+.btn-accept {
+  background: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
+}
+
+.loading {
+  padding: 48px;
+  text-align: center;
+}

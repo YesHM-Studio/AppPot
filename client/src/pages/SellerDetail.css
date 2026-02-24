@@ -1,0 +1,66 @@
+.seller-detail {
+  max-width: 800px;
+}
+
+.seller-header {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.seller-header .avatar {
+  width: 96px;
+  height: 96px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.seller-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.seller-header .rating {
+  color: var(--text-light);
+}
+
+.bio {
+  margin-bottom: 32px;
+  color: var(--text-light);
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.portfolio-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.portfolio-item img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.portfolio-item h4 {
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+.portfolio-item p {
+  padding: 0 12px 12px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}

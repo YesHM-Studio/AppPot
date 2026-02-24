@@ -1,0 +1,44 @@
+.project-create {
+  max-width: 600px;
+}
+
+.project-create h1 {
+  margin-bottom: 24px;
+}
+
+.project-create form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-create label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.project-create input,
+.project-create select,
+.project-create textarea {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.project-create textarea {
+  resize: vertical;
+}
+
+.project-create .error {
+  color: #e74c3c;
+}
+
+.project-create .btn-submit {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  margin-top: 8px;
+}
