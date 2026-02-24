@@ -17,11 +17,42 @@ async function init() {
   if (fs.existsSync(dbPath)) {
     const buf = fs.readFileSync(dbPath);
     db = new SQL.Database(buf);
+    migrate(db);
+    save();
   } else {
     db = new SQL.Database();
     initDb(db);
     save();
   }
+}
+
+function migrate(database) {
+  try {
+    database.exec(`ALTER TABLE users ADD COLUMN recovery_email TEXT`);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE users ADD COLUMN is_active INTEGER DEFAULT 1`);
+  } catch (_) {}
+  try {
+    database.exec(`
+      CREATE TABLE IF NOT EXISTS password_reset_codes (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        code TEXT NOT NULL,
+        expires_at DATETIME NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE users ADD COLUMN name_change_count INTEGER DEFAULT 0`);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE users ADD COLUMN name_last_changed TEXT`);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE users ADD COLUMN email_last_changed TEXT`);
+  } catch (_) {}
 }
 
 let saveTimer = null;

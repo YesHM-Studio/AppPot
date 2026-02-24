@@ -1,7 +1,22 @@
 import { Router } from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import multer from 'multer';
 import db from '../db/index.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { v4 as uuidv4 } from 'uuid';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const chatStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, path.join(__dirname, '../../uploads')),
+  filename: (req, file, cb) => cb(null, `chat-${uuidv4()}-${(file.originalname || 'file').replace(/[^a-zA-Z0-9._-]/g, '_')}`)
+});
+const chatUpload = multer({
+  storage: chatStorage,
+  limits: { fileSize: 1024 * 1024 * 1024 }
+});
 
 const router = Router();
 
@@ -47,6 +62,11 @@ router.post('/rooms', authMiddleware, (req, res) => {
     room = db.prepare('SELECT * FROM chat_rooms WHERE id = ?').get(id);
   }
   res.json(room);
+});
+
+router.post('/upload', authMiddleware, chatUpload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: '파일이 없습니다.' });
+  res.json({ url: `/uploads/${req.file.filename}`, filename: req.file.originalname || req.file.filename });
 });
 
 export default router;

@@ -12,7 +12,9 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState('');
   const [socket, setSocket] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const messagesEndRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     api.get('/api/chat/rooms').then(({ data }) => setRooms(data));
@@ -51,6 +53,47 @@ export default function Chat() {
     setNewMsg('');
   };
 
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !socket || !roomId) return;
+    if (file.size > 1024 * 1024 * 1024) {
+      alert('파일 크기는 1GB 이하여야 합니다.');
+      e.target.value = '';
+      return;
+    }
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const { data } = await api.post('/api/chat/upload', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 120000
+      });
+      const content = `[FILE]${data.filename}|${data.url}`;
+      socket.emit('send-message', { roomId, senderId: user.id, content });
+    } catch (err) {
+      alert(err.response?.data?.error || '파일 업로드에 실패했습니다.');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const renderMessageContent = (m) => {
+    if (m.content?.startsWith('[FILE]')) {
+      const [, rest] = m.content.split('[FILE]');
+      const [filename, url] = (rest || '').split('|');
+      if (url) {
+        return (
+          <a href={url} target="_blank" rel="noopener noreferrer" className="msg-file">
+            📎 {filename || '파일'}
+          </a>
+        );
+      }
+    }
+    return <p>{m.content}</p>;
+  };
+
   return (
     <div className="chat-page">
       <div className="chat-sidebar">
@@ -73,12 +116,28 @@ export default function Chat() {
               {messages.map((m) => (
                 <div key={m.id} className={`msg ${m.sender_id === user?.id ? 'me' : ''}`}>
                   <span className="sender">{m.sender_name}</span>
-                  <p>{m.content}</p>
+                  {renderMessageContent(m)}
                 </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
             <div className="input-area">
+              <button
+                type="button"
+                className="chat-attach-btn"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                title="파일 첨부 (최대 1GB)"
+              >
+                +
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="*"
+                className="chat-file-input"
+                onChange={handleFileSelect}
+              />
               <input
                 value={newMsg}
                 onChange={(e) => setNewMsg(e.target.value)}

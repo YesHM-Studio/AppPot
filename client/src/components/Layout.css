@@ -68,6 +68,12 @@
   margin-left: auto;
 }
 
+.util-divider {
+  width: 1px;
+  height: 16px;
+  background: #ddd;
+}
+
 .header-utils a {
   font-size: 0.875rem;
   color: #333;

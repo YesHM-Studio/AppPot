@@ -5,3 +5,7 @@ server/uploads/
 server/public/
 .env
 .DS_Store
+.last-port
+.cursor/
+.vscode/
+public/

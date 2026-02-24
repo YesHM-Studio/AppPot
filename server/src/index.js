@@ -5,6 +5,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,19 +59,23 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: '서버 오류가 발생했습니다.' });
 });
 
-// 프로덕션: server/public (빌드 시 client/dist 복사됨) - __dirname 기준으로 항상 찾음
+// 개발: Vite로 프록시 (새로고침 시 바로 반영)
+// 프로덕션: server/public 정적 파일 서빙
+const isDev = process.env.NODE_ENV === 'development';
 const staticDir = path.join(__dirname, '../public');
-if (fs.existsSync(staticDir)) {
-  console.log('✅ Static files from:', staticDir);
-  app.use(express.static(staticDir, {
-    index: false,
-    maxAge: '1y',
-    etag: true,
-    lastModified: true,
+
+if (isDev) {
+  app.use(createProxyMiddleware({
+    target: 'http://localhost:5173',
+    ws: true,
+    changeOrigin: true,
   }));
+  console.log('✅ 개발 모드: http://localhost:3001 → Vite 프록시 (새로고침 시 바로 반영)');
+} else if (fs.existsSync(staticDir)) {
+  console.log('✅ Static files from:', staticDir);
+  app.use(express.static(staticDir, { index: false, maxAge: '1y', etag: true, lastModified: true }));
   app.get('*', (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-    res.set('Pragma', 'no-cache');
     res.sendFile(path.join(staticDir, 'index.html'), (err) => {
       if (err) res.status(500).send('Error loading app');
     });
@@ -87,7 +92,10 @@ io.on('connection', (socket) => {
     const id = uuidv4();
     db.prepare('INSERT INTO chat_messages (id, room_id, sender_id, content) VALUES (?, ?, ?, ?)')
       .run(id, roomId, senderId, content);
-    const msg = db.prepare('SELECT * FROM chat_messages WHERE id = ?').get(id);
+    const msg = db.prepare(`
+      SELECT m.*, u.name as sender_name FROM chat_messages m
+      JOIN users u ON m.sender_id = u.id WHERE m.id = ?
+    `).get(id);
     io.to(roomId).emit('new-message', msg);
   });
 });

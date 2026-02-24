@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { FEATURED_SERVICES } from '../data/featuredServices';
 import './Home.css';
 import imgWeb from '../assets/images/review-web-result.png';
 import imgPg from '../assets/images/review-pg-result.png';
@@ -21,18 +21,11 @@ const REPEAT_COUNT = 20;
 const REVIEWS_TRACK = Array(REPEAT_COUNT).fill(null).flatMap(() => REVIEWS);
 
 export default function Home() {
-  const [projects, setProjects] = useState([]);
   const [bannerIndex, setBannerIndex] = useState(0);
   const [bannerPaused, setBannerPaused] = useState(false);
   const reviewScrollRef = useRef(null);
   const [reviewScrollPaused, setReviewScrollPaused] = useState(false);
   const dragRef = useRef({ isDragging: false, startX: 0, startScroll: 0 });
-
-  useEffect(() => {
-    axios.get('/api/projects?limit=8', { timeout: 10000 })
-      .then(({ data }) => setProjects(data.projects || []))
-      .catch(() => setProjects([]));
-  }, []);
 
   useEffect(() => {
     if (bannerPaused) return;
@@ -214,7 +207,7 @@ export default function Home() {
           ))}
         </div>
         <Link to="/projects/new" className="cat-row-banner">
-          지금 의뢰 · 최대 20% 할인
+          지금 의뢰 · 최대 20% 할인 · 지금 의뢰시 빠른 매칭
         </Link>
       </section>
       <section className="reviews-section">
@@ -252,27 +245,21 @@ export default function Home() {
       </section>
       <section className="product-section">
         <div className="section-head">
-          <h2>지금 제일 잘 나가는 의뢰</h2>
-          <Link to="/projects" className="more-link">전체보기</Link>
+          <h2>인기 많은 의뢰</h2>
+          <Link to="/projects/best" className="more-link">전체보기</Link>
         </div>
-        <div className="product-grid">
-          {projects.length > 0 ? (
-            projects.map((p) => (
-              <Link key={p.id} to={`/projects/${p.id}`} className="product-card">
-                <div className="card-thumb" />
-                <div className="card-info">
-                  <h3>{p.title}</h3>
-                  <p className="card-meta">{p.client_name} · {p.category}</p>
-                  <p className="card-price">{p.budget?.toLocaleString()}원</p>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <div className="empty-msg">
-              <p>등록된 의뢰가 없어요.</p>
-              <Link to="/projects/new">첫 의뢰 등록하기</Link>
-            </div>
-          )}
+        <div className="product-grid featured-grid">
+          {FEATURED_SERVICES.map((s) => (
+            <Link key={s.id} to={s.to} className="featured-card">
+              <div className="featured-visual" style={{ background: s.gradient }}>
+                <img src={s.image} alt={s.title} />
+              </div>
+              <div className="featured-stars">{'★'.repeat(s.stars)}</div>
+              <h3>{s.title}</h3>
+              <p className="featured-sub">{s.subtitle}</p>
+              <p className="featured-desc">{s.desc}</p>
+            </Link>
+          ))}
         </div>
       </section>
     </div>

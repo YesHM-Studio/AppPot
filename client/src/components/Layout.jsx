@@ -39,9 +39,13 @@ function useCountdown(target) {
 }
 
 export default function Layout() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
   const countdown = useCountdown(TIMEDEAL_END);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <div className="layout-gmarket">
@@ -49,16 +53,15 @@ export default function Layout() {
         <div className="header-inner">
           <Link to="/" className="logo">AppPot</Link>
           <div className="search-wrap">
-            <input type="text" placeholder="어떤 재능이 필요하세요? 검색" className="search-input" />
+            <input type="text" placeholder="어떤 서비스를 찾고 계시나요?" className="search-input" />
             <button type="button" className="search-btn">검색</button>
           </div>
           <div className="header-utils">
             {user ? (
               <>
                 <Link to="/mypage">마이페이지</Link>
+                <span className="util-divider" aria-hidden />
                 <Link to="/chat">채팅</Link>
-                <span className="user-name">{user.name}</span>
-                <button onClick={logout} className="util-btn">로그아웃</button>
               </>
             ) : (
               <>
@@ -103,12 +106,6 @@ export default function Layout() {
             <p className="footer-line">사업자등록번호 : 424-11-02587 | 통신판매업신고번호 : 제 2023-대전유성-1254호</p>
             <hr className="footer-divider" />
             <p className="footer-copyright">© AppPot - 노현민 스튜디오 유통회사</p>
-          </div>
-          <div className="footer-links">
-            <Link to="/projects">의뢰보기</Link>
-            <Link to="/sellers">판매자</Link>
-            <Link to="#" className="footer-policy">이용약관</Link>
-            <Link to="#" className="footer-policy">개인정보처리방침</Link>
           </div>
         </div>
       </footer>

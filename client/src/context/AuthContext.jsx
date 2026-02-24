@@ -38,6 +38,13 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const refreshUser = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const { data } = await axios.get('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+    setUser(data);
+  };
+
   const api = axios.create({ baseURL: '' });
   api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
@@ -46,7 +53,7 @@ export function AuthProvider({ children }) {
   });
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, api }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser, api }}>
       {children}
     </AuthContext.Provider>
   );

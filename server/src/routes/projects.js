@@ -62,6 +62,16 @@ router.post('/', authMiddleware, upload.array('files', 5), (req, res) => {
   if (!title || !category || !budget) {
     return res.status(400).json({ error: '제목, 카테고리, 예산은 필수입니다.' });
   }
+  const budgetNum = parseInt(budget, 10);
+  if (isNaN(budgetNum) || budgetNum < 100000) {
+    return res.status(400).json({ error: '예산은 최소 10만원 이상이어야 합니다.' });
+  }
+  if (deadline) {
+    const todayKST = new Date().toLocaleDateString('fr-CA', { timeZone: 'Asia/Seoul' });
+    if (deadline < todayKST) {
+      return res.status(400).json({ error: '마감일은 오늘 이후로 선택해주세요.' });
+    }
+  }
   const id = uuidv4();
   db.prepare(`
     INSERT INTO projects (id, client_id, title, category, budget, deadline, description)

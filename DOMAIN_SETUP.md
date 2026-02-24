@@ -39,20 +39,20 @@
 
 ---
 
-### ②-A. Render에 배포했다면
+### ②-A. Render에 배포한 경우 (호스팅케이알 DNS)
 
-1. [Render](https://render.com) 로그인 → AppPot 서비스 선택
-2. **Settings** → **Custom Domains** → **Add Custom Domain**
-3. `appot.kr` 입력 후 Render가 안내하는 **CNAME 주소** 또는 **IP** 확인
+**⚠️ 중요:** AAAA 레코드가 있으면 **삭제**하세요. Render는 IPv4만 지원합니다.
 
-4. **호스팅케이알** 화면 → **DNS 레코드 관리** → **추가** 클릭 후:
+**호스팅케이알** → appot.kr → **DNS 레코드 관리**에서 아래 **3개** 추가:
 
 | 유형 | 호스트 이름 | 값 |
 |------|-------------|-----|
-| CNAME | www | (Render에서 안내한 주소, 예: apppot-xxxx.onrender.com) |
-| A | @ | (Render apex IP - Render가 제공하는 경우) |
+| **A** | @ | **216.24.57.1** |
+| **CNAME** | www | **(Render URL)** 예: apppot-xxxx.onrender.com |
+| **CAA** | @ | **0 issue "letsencrypt.org"** (선택) |
 
-※ Render가 apex(루트)용 A 레코드 IP를 주지 않으면, `www.appot.kr`만 먼저 연결하고 루트는 나중에 설정
+- **A 레코드**: appot.kr (루트) → Render 로드밸런서 IP
+- **CNAME**: www.appot.kr → Render 서비스 주소 (Render 대시보드 Custom Domains에서 확인)
 
 ---
 

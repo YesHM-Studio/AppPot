@@ -5,15 +5,150 @@
 .profile-card {
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 28px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   box-shadow: var(--card-shadow);
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-top-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.profile-avatar-wrap {
+  flex-shrink: 0;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.avatar-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-input {
+  display: none;
+}
+
+.avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  font-size: 2rem;
+  color: var(--primary);
+}
+
+.avatar-hint {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.profile-name-row,
+.profile-email-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.profile-name-row h2,
+.profile-email-row .profile-email {
+  margin-bottom: 0;
+}
+
+.profile-info h2 {
+  font-size: 1.25rem;
+}
+
+.profile-email {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.profile-edit-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-edit-icon:hover:not(:disabled) {
+  color: var(--primary);
+}
+
+.profile-edit-icon:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.profile-edit-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.profile-edit-input {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  width: 160px;
+}
+
+.profile-edit-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+
+.profile-edit-btn.cancel {
+  background: #888;
+}
+
+.profile-edit-btn:hover {
+  opacity: 0.9;
 }
 
 .profile-card .role {
   display: inline-block;
-  margin-top: 8px;
   padding: 6px 14px;
   background: var(--primary-bg);
   color: var(--primary);
@@ -22,22 +157,109 @@
   font-weight: 500;
 }
 
-.portfolio-form button {
+.profile-bio-wrap label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.profile-bio-wrap textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-save {
+  padding: 10px 20px;
   background: var(--primary);
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: 500;
+  cursor: pointer;
 }
 
-.mypage section {
-  margin-bottom: 32px;
+.btn-save:hover {
+  background: var(--primary-light);
 }
 
-.mypage section h2 {
+.profile-card .btn-logout {
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  background: white;
+  color: #666;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.profile-card .btn-logout:hover {
+  background: #f5f5f5;
+}
+
+.mypage-section {
+  margin-bottom: 24px;
+}
+
+.mypage-section.card-section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+}
+
+.mypage-section h2 {
   font-size: 1.1rem;
   margin-bottom: 16px;
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.btn-add {
+  display: inline-block;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.btn-add:hover {
+  background: var(--primary-light);
+}
+
+.my-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.my-projects a {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.my-projects a:hover {
+  background: var(--primary-bg);
 }
 
 .portfolio-form {
@@ -55,3 +277,140 @@
   border-radius: 8px;
 }
 
+.password-change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.password-change-form label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.password-change-form label:first-of-type {
+  margin-top: 0;
+}
+
+.mypage-pw-wrap {
+  position: relative;
+}
+
+.mypage-pw-wrap input {
+  width: 100%;
+  padding: 12px 44px 12px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.mypage-pw-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypage-pw-toggle:hover {
+  color: var(--primary);
+}
+
+.mypage-pw-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.password-change-error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+}
+
+.btn-password-change {
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.btn-password-change:hover {
+  background: var(--primary-light);
+}
+
+.portfolio-form button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.mypage-advanced {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.advanced-toggle {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.advanced-toggle:hover {
+  color: var(--text);
+}
+
+.advanced-content {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.advanced-item {
+  font-size: 0.85rem;
+  color: #666;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  text-align: left;
+}
+
+.advanced-item:hover {
+  color: var(--text);
+}
+
+.advanced-item.danger {
+  color: #c62828;
+}
+
+.advanced-item.danger:hover {
+  color: #b71c1c;
+}
+
+.advanced-item.danger.confirm {
+  font-weight: 600;
+}
