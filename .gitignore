@@ -1,6 +1,5 @@
 node_modules/
 dist/
-public/
 server/data/
 server/uploads/
 server/public/
