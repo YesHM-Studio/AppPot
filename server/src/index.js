@@ -69,13 +69,28 @@ if (isDev) {
     target: 'http://localhost:5173',
     ws: true,
     changeOrigin: true,
+    onProxyRes: (proxyRes) => {
+      proxyRes.headers['cache-control'] = 'no-store, no-cache, must-revalidate, max-age=0';
+      proxyRes.headers['pragma'] = 'no-cache';
+      proxyRes.headers['expires'] = '0';
+    },
   }));
   console.log('✅ 개발 모드: http://localhost:3001 → Vite 프록시 (새로고침 시 바로 반영)');
 } else if (fs.existsSync(staticDir)) {
   console.log('✅ Static files from:', staticDir);
-  app.use(express.static(staticDir, { index: false, maxAge: '1y', etag: true, lastModified: true }));
+  // serve:new(APPOT_DEV_CODE=1) 시 캐시 비활성화 → 새로고침 시 항상 최신 빌드 반영
+  const isDevBuild = process.env.APPOT_DEV_CODE === '1';
+  const staticOpts = isDevBuild
+    ? { index: false, maxAge: 0, etag: false, lastModified: false, setHeaders: (res) => {
+        res.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        res.set('Pragma', 'no-cache');
+        res.set('Expires', '0');
+      }}
+    : { index: false, maxAge: '1y', etag: true, lastModified: true };
+  app.use(express.static(staticDir, staticOpts));
   app.get('*', (req, res) => {
-    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    if (isDevBuild) res.set('Pragma', 'no-cache');
     res.sendFile(path.join(staticDir, 'index.html'), (err) => {
       if (err) res.status(500).send('Error loading app');
     });

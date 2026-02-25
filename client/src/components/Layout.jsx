@@ -99,6 +99,16 @@ export default function Layout() {
       <main className="gmarket-main">
         <Outlet />
       </main>
+      {typeof window !== 'undefined' && window.location?.hostname === 'localhost' && (
+        <div style={{
+          position: 'fixed', top: 12, right: 12, zIndex: 9999,
+          fontSize: 11, color: '#000', fontWeight: 700,
+          background: '#7fff00', padding: '6px 12px', borderRadius: 6,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+        }}>
+          로드: {new Date().toLocaleTimeString('ko-KR')}
+        </div>
+      )}
       <footer className="gmarket-footer">
         <div className="footer-inner">
           <div className="footer-info">

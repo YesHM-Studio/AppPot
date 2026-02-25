@@ -13,7 +13,10 @@
     "start": "node server/src/index.js",
     "start:local": "PORT=5000 npm start",
     "dev:start": "npm run build && npm start",
-    "serve:new": "node scripts/serve-new.js"
+    "serve": "npm run dev",
+    "serve:open": "node scripts/dev-open.js",
+    "serve:new": "node scripts/serve-new.js",
+    "serve:watch": "node scripts/serve-watch.js"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

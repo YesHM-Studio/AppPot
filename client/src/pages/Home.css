@@ -553,7 +553,7 @@
 .product-section {
   background: linear-gradient(180deg, #fff 0%, #fefefe 100%);
   border-radius: 12px;
-  padding: 24px;
+  padding: 32px;
   margin-bottom: 24px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
   border: 1px solid rgba(77,182,172,0.1);
@@ -571,6 +571,13 @@
   font-weight: 700;
 }
 
+.section-star {
+  font-size: 1.4rem;
+  margin-left: 6px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .more-link {
   font-size: 0.9rem;
   color: var(--primary);
@@ -585,7 +592,7 @@
 
 .product-grid.featured-grid {
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 32px;
 }
 
 .featured-card {
@@ -622,27 +629,28 @@
   color: #ffc107;
   font-size: 1.1rem;
   letter-spacing: 2px;
-  padding: 14px 20px 0;
+  padding: 18px 24px 0;
 }
 
 .featured-card h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  padding: 8px 20px 0;
+  padding: 12px 24px 0;
   color: #222;
 }
 
 .featured-sub {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #888;
-  padding: 4px 20px 0;
+  padding: 12px 24px 36px;
+  margin-bottom: 48px;
 }
 
 .featured-desc {
   font-size: 0.9rem;
   color: #555;
-  line-height: 1.5;
-  padding: 8px 20px 20px;
+  line-height: 1.6;
+  padding: 12px 24px 24px;
 }
 
 .product-card {
