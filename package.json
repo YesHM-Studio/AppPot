@@ -15,6 +15,7 @@
     "dev:start": "npm run build && npm start",
     "serve": "npm run dev",
     "serve:open": "node scripts/dev-open.js",
+    "dev:fresh": "rm -rf client/node_modules/.vite && node scripts/dev-open.js",
     "serve:new": "node scripts/serve-new.js",
     "serve:watch": "node scripts/serve-watch.js"
   },

@@ -245,7 +245,7 @@ export default function Home() {
       </section>
       <section className="product-section">
         <div className="section-head">
-          <h2>인기 많은 의뢰 <span className="section-star">⭐</span></h2>
+          <h2>인기 많은 의뢰 <span className="section-star">⭐</span> <span style={{ fontSize: '0.7rem', color: '#4caf50', marginLeft: 8 }}>· v2</span></h2>
           <Link to="/projects/best" className="more-link">전체보기</Link>
         </div>
         <div className="product-grid featured-grid">

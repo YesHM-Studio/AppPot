@@ -1,0 +1,17 @@
+============================================
+호스팅케이알 DNS 레코드 관리 - 복사해서 붙여넣기
+============================================
+
+1) appot.kr 루트 도메인
+   유형: A
+   호스트 이름: @
+   값: 216.24.57.1
+
+2) www.appot.kr
+   유형: CNAME
+   호스트 이름: www
+   값: (Render 대시보드 Custom Domains에서 appot.kr 추가 시 표시되는 주소 - 예: apppot-xxxx.onrender.com)
+
+※ Render 주소 확인: https://dashboard.render.com → apppot 서비스 → Settings → Custom Domains
+
+※ AAAA 레코드가 있으면 삭제하세요.
