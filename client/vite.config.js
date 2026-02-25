@@ -15,6 +15,7 @@ export default defineConfig({
   plugins: [react(), buildTimestamp()],
   server: {
     port: 5173,
+    host: true,
     headers: {
       'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
       'Pragma': 'no-cache',

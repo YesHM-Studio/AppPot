@@ -1,0 +1,7 @@
+1. 터미널에서 실행:
+   cd /Users/nhm_studio/AppPot
+   npm run serve:open
+
+2. 브라우저 주소창에 입력: http://localhost:3001
+
+   (5173이 안 뜨면 3001로 접속)
