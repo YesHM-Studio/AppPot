@@ -6,6 +6,7 @@ server/public/
 .env
 .DS_Store
 .last-port
+.chrome-dev-session/
 .cursor/
 .vscode/
 public/
