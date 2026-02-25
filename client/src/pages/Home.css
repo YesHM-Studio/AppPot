@@ -571,13 +571,6 @@
   font-weight: 700;
 }
 
-.section-star {
-  font-size: 1.4rem;
-  margin-left: 6px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
 .more-link {
   font-size: 0.9rem;
   color: var(--primary);

@@ -18,7 +18,8 @@
     "dev:fresh": "rm -rf client/node_modules/.vite && node scripts/dev-open.js",
     "dev:nocache": "node scripts/dev-nocache.js",
     "serve:new": "node scripts/serve-new.js",
-    "serve:watch": "node scripts/serve-watch.js"
+    "serve:watch": "node scripts/serve-watch.js",
+    "ship": "node scripts/ship.js"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
