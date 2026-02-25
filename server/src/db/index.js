@@ -53,6 +53,21 @@ function migrate(database) {
   try {
     database.exec(`ALTER TABLE users ADD COLUMN email_last_changed TEXT`);
   } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE projects ADD COLUMN is_draft INTEGER DEFAULT 0`);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE projects ADD COLUMN is_commission INTEGER DEFAULT 0`);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE projects ADD COLUMN thumbnail_url TEXT`);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE projects ADD COLUMN start_price INTEGER`);
+  } catch (_) {}
+  try {
+    database.exec(`ALTER TABLE projects ADD COLUMN options_json TEXT`);
+  } catch (_) {}
 }
 
 let saveTimer = null;

@@ -22,6 +22,12 @@ const upload = multer({ storage });
 
 const router = Router();
 
+router.get('/commission/design', (req, res) => {
+  const p = db.prepare('SELECT id FROM projects WHERE is_commission = 1 AND category = ? LIMIT 1').get('디자인');
+  if (!p) return res.status(404).json({ error: '디자인 커미션을 찾을 수 없습니다.' });
+  res.json({ id: p.id });
+});
+
 router.get('/', (req, res) => {
   const { status, category, page = 1, limit = 12 } = req.query;
   let sql = 'SELECT p.*, u.name as client_name FROM projects p JOIN users u ON p.client_id = u.id WHERE 1=1';
@@ -30,7 +36,8 @@ router.get('/', (req, res) => {
   if (category) { sql += ' AND p.category = ?'; params.push(category); }
   sql += ' ORDER BY p.created_at DESC LIMIT ? OFFSET ?';
   params.push(parseInt(limit), (parseInt(page) - 1) * parseInt(limit));
-  const projects = db.prepare(sql).all(...params);
+  const rows = db.prepare(sql).all(...params);
+  const projects = rows.map((p) => ({ ...p, client_name: (p.is_commission ? 'AppPot' : p.client_name) || 'AppPot' }));
   let countSql = 'SELECT COUNT(*) as c FROM projects WHERE 1=1';
   const countParams = [];
   if (status) { countSql += ' AND status = ?'; countParams.push(status); }
@@ -46,6 +53,7 @@ router.get('/:id', (req, res) => {
     WHERE p.id = ?
   `).get(req.params.id);
   if (!project) return res.status(404).json({ error: '프로젝트를 찾을 수 없습니다.' });
+  const clientName = project.is_commission ? 'AppPot' : project.client_name;
   const files = db.prepare('SELECT * FROM project_files WHERE project_id = ?').all(project.id);
   const estimates = db.prepare(`
     SELECT e.*, u.name as seller_name, sp.rating, sp.review_count
@@ -54,7 +62,7 @@ router.get('/:id', (req, res) => {
     LEFT JOIN seller_profiles sp ON sp.user_id = u.id
     WHERE e.project_id = ?
   `).all(project.id);
-  res.json({ ...project, files, estimates });
+  res.json({ ...project, client_name: clientName, files, estimates });
 });
 
 router.post('/', authMiddleware, upload.array('files', 5), (req, res) => {

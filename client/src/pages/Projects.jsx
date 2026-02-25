@@ -52,11 +52,11 @@ export default function Projects() {
           <div className="project-grid">
             {data.projects.map((p) => (
               <Link key={p.id} to={`/projects/${p.id}`} className="project-card">
-                <div className="card-thumb" />
+                <div className="card-thumb" style={p.thumbnail_url ? { backgroundImage: `url(${p.thumbnail_url})` } : {}} />
                 <span className="status-badge">{p.status}</span>
                 <h3>{p.title}</h3>
                 <p className="meta">{p.client_name} · {p.category}</p>
-                <p className="budget">{p.budget?.toLocaleString()}원</p>
+                <p className="budget">{(p.is_commission ? (p.start_price ?? p.budget) : p.budget)?.toLocaleString()}원</p>
               </Link>
             ))}
           </div>

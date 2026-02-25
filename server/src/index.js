@@ -33,6 +33,31 @@ if (!adminExists) {
   console.log('✅ 기본 관리자 생성 (admin@apppot.com / admin123)');
 }
 
+// 디자인 커미션 생성/업데이트
+const COMMISSION_OPTIONS = JSON.stringify({
+  general: { price: 150000, items: ['메인 1종 + 부가 화면 10종', '기본 컬러 가이드 포함', '수정 3회', '빠르고 확실한 MVP용 디자인'], desc: '메인 1종 + 부가 화면 10종, 기본 컬러 가이드 포함. 수정 3회, 빠르고 확실한 MVP용 디자인.' },
+  plus: { price: 170000, items: ['메인 1종 + 부가 화면 50종', '팝업창 무제한', '브랜드 가이드·소셜 로그인 UI 포함', '수정 무제한'], desc: '메인 1종 + 부가 화면 50종, 팝업창 무제한. 브랜드 가이드·소셜 로그인 UI 포함, 수정 무제한.' },
+  optional: [{ id: 0, label: '브랜드 컬러·타이포 가이드', price: 0 }, { id: 1, label: '소셜 로그인 UI', price: 0 }],
+  optionalPlus: [{ id: 0, label: '스플래시·로딩 화면', price: 0 }, { id: 1, label: '다크 모드 UI', price: 0 }]
+});
+const adminId = db.prepare('SELECT id FROM users WHERE role = ?').get('admin')?.id;
+if (adminId) {
+  const existing = db.prepare('SELECT id FROM projects WHERE is_commission = 1 AND category = ?').get('디자인');
+  const title = '앱 UI 전체 디자인 (화면 작업)';
+  const desc = '앱 전체 화면을 클린하고 모던하게 디자인해 드립니다. 로그인·회원가입, 메인·서브 화면, 브랜드 컬러 맞춤 등 원하시는 스타일로 작업합니다.';
+  const COMMISSION_ID = 'commission-design-app-ui';
+  if (existing) {
+    db.prepare('UPDATE projects SET title = ?, description = ?, budget = ?, start_price = ?, options_json = ?, thumbnail_url = ? WHERE id = ?')
+      .run(title, desc, 220000, 150000, COMMISSION_OPTIONS, '/images/commission-design-app-ui.png', existing.id);
+  } else {
+    db.prepare(`
+      INSERT INTO projects (id, client_id, title, category, budget, description, is_draft, status, is_commission, thumbnail_url, start_price, options_json)
+      VALUES (?, ?, ?, ?, ?, ?, 0, 'open', 1, ?, ?, ?)
+    `).run(COMMISSION_ID, adminId, title, '디자인', 220000, desc, '/images/commission-design-app-ui.png', 150000, COMMISSION_OPTIONS);
+    console.log('✅ 디자인 커미션 생성');
+  }
+}
+
 const app = express();
 const httpServer = createServer(app);
 httpServer.keepAliveTimeout = 65000;

@@ -15,9 +15,9 @@ export const FEATURED_SERVICES = [
   },
   {
     id: 'design',
-    title: '앱·웹 화려한 디자인',
-    subtitle: 'UI/UX · 브랜딩 · 로고',
-    desc: '첫눈에 반하게 만드는 화려한 비주얼',
+    title: '앱 UI 전체 디자인',
+    subtitle: '220,000원 · 화면 작업',
+    desc: '클린하고 모던한 앱 화면 디자인, 브랜드 컬러·다크모드',
     stars: 5,
     image: imgDesign,
     gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
