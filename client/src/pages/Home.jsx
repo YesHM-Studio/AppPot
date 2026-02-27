@@ -20,9 +20,39 @@ const REVIEWS = [
 const REPEAT_COUNT = 20;
 const REVIEWS_TRACK = Array(REPEAT_COUNT).fill(null).flatMap(() => REVIEWS);
 
+const ALL_SHORTCUT_OPTIONS = [
+  { id: 'all', to: '/projects', label: '전체 커미션', color: 'primary' },
+  { id: 'design', to: '/projects?category=디자인', label: '디자인', color: 'design' },
+  { id: 'dev', to: '/projects?category=개발', label: '개발', color: 'design' },
+  { id: 'marketing', to: '/projects?category=마케팅', label: '마케팅', color: 'marketing' },
+  { id: 'writing', to: '/projects?category=글쓰기', label: '글쓰기', color: 'etc' },
+  { id: 'translate', to: '/projects?category=번역', label: '번역', color: 'etc' },
+  { id: 'community', to: '/community', label: '커뮤니티', color: 'community' },
+  { id: 'etc', to: '/projects?category=기타', label: '기타', color: 'etc' },
+];
+
+const DEFAULT_SHORTCUTS = ['all', 'design', 'marketing', 'community', 'etc'];
+
+function loadShortcuts() {
+  try {
+    const s = localStorage.getItem('apppot_shortcuts');
+    return s ? JSON.parse(s) : [...DEFAULT_SHORTCUTS];
+  } catch {
+    return [...DEFAULT_SHORTCUTS];
+  }
+}
+
+function saveShortcuts(ids) {
+  localStorage.setItem('apppot_shortcuts', JSON.stringify(ids));
+}
+
 export default function Home() {
   const [bannerIndex, setBannerIndex] = useState(0);
   const [bannerPaused, setBannerPaused] = useState(false);
+  const [categoryExpanded, setCategoryExpanded] = useState(false);
+  const [shortcuts, setShortcuts] = useState(() => loadShortcuts());
+  const [editShortcutsOpen, setEditShortcutsOpen] = useState(false);
+  const [editOrder, setEditOrder] = useState(() => loadShortcuts());
   const reviewScrollRef = useRef(null);
   const [reviewScrollPaused, setReviewScrollPaused] = useState(false);
   const dragRef = useRef({ isDragging: false, startX: 0, startScroll: 0 });
@@ -69,19 +99,15 @@ export default function Home() {
     return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
   }, []);
 
-  const categories = [
-    { to: '/projects', label: '전체 의뢰', icon: '◆', color: 'primary' },
-    { to: '/projects?category=디자인', label: '디자인', icon: '◇', color: 'design' },
-    { to: '/projects?category=마케팅', label: '마케팅', icon: '◇', color: 'marketing' },
-    { to: '/projects?category=기타', label: '기타', icon: '◇', color: 'etc' },
-    { to: '/sellers', label: '판매자 찾기', icon: '◆', color: 'sellers' },
-  ];
+  const categories = (shortcuts.length > 0 ? shortcuts : ['all'])
+    .map((id) => ALL_SHORTCUT_OPTIONS.find((o) => o.id === id))
+    .filter(Boolean);
 
   const categoryIcons = [
-    { to: '/projects?category=디자인', label: '디자인', gradient: 'linear-gradient(135deg, #00796b 0%, #26a69a 100%)', icon: 'design' },
-    { to: '/projects?category=마케팅', label: '마케팅', gradient: 'linear-gradient(135deg, #26a69a 0%, #4db6ac 100%)', icon: 'marketing' },
-    { to: '/projects?category=기타', label: '기타', gradient: 'linear-gradient(135deg, #4db6ac 0%, #80cbc4 100%)', icon: 'etc' },
-    { to: '/sellers', label: '판매자 찾기', gradient: 'linear-gradient(135deg, #26a69a 0%, #80cbc4 100%)', icon: 'sellers' },
+    { to: '/projects?category=디자인', label: '디자인', gradient: 'linear-gradient(135deg, #3182F6 0%, #6BA3F7 100%)', icon: 'design' },
+    { to: '/projects?category=마케팅', label: '마케팅', gradient: 'linear-gradient(135deg, #4E65F3 0%, #7C8EF7 100%)', icon: 'marketing' },
+    { to: '/community', label: '커뮤니티', gradient: 'linear-gradient(135deg, #3182F6 0%, #93C5FD 100%)', icon: 'community' },
+    { to: '/projects?category=기타', label: '기타', gradient: 'linear-gradient(135deg, #6BA3F7 0%, #A5C9FA 100%)', icon: 'etc' },
   ];
 
   const CatIcon = ({ type }) => {
@@ -97,6 +123,9 @@ export default function Home() {
       ),
       sellers: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      ),
+      community: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
       ),
     };
     return <span className="cat-icon-svg">{icons[type] || icons.etc}</span>;
@@ -153,17 +182,104 @@ export default function Home() {
     return null;
   };
 
+  const handleShortcutMove = (idx, dir) => {
+    const n = [...editOrder];
+    const j = dir === 'up' ? idx - 1 : idx + 1;
+    if (j < 0 || j >= n.length) return;
+    [n[idx], n[j]] = [n[j], n[idx]];
+    setEditOrder(n);
+  };
+
+  const handleShortcutRemove = (idx) => {
+    setEditOrder(editOrder.filter((_, i) => i !== idx));
+  };
+
+  const handleShortcutAdd = (id) => {
+    if (editOrder.includes(id)) return;
+    setEditOrder([...editOrder, id]);
+  };
+
+  const handleShortcutsSave = () => {
+    if (editOrder.length > 0) {
+      setShortcuts(editOrder);
+      saveShortcuts(editOrder);
+    }
+    setEditShortcutsOpen(false);
+  };
+
   return (
     <div className="home-gmarket">
+      {editShortcutsOpen && (
+        <div className="shortcut-edit-modal-overlay" onClick={() => setEditShortcutsOpen(false)}>
+          <div className="shortcut-edit-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>바로가기 편집</h3>
+            <div className="shortcut-edit-selected">
+              <h4>표시 순서</h4>
+              {editOrder.map((id, i) => {
+                const opt = ALL_SHORTCUT_OPTIONS.find((o) => o.id === id);
+                if (!opt) return null;
+                return (
+                  <div key={id} className="shortcut-edit-item">
+                    <span>{opt.label}</span>
+                    <div className="shortcut-edit-actions">
+                      <button type="button" onClick={() => handleShortcutMove(i, 'up')} disabled={i === 0} aria-label="위로">↑</button>
+                      <button type="button" onClick={() => handleShortcutMove(i, 'down')} disabled={i === editOrder.length - 1} aria-label="아래로">↓</button>
+                      <button type="button" onClick={() => handleShortcutRemove(i)} aria-label="제거">×</button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="shortcut-edit-add">
+              <h4>추가</h4>
+              <div className="shortcut-edit-add-btns">
+                {ALL_SHORTCUT_OPTIONS.filter((o) => !editOrder.includes(o.id)).map((o) => (
+                  <button key={o.id} type="button" onClick={() => handleShortcutAdd(o.id)}>{o.label}</button>
+                ))}
+              </div>
+            </div>
+            <div className="shortcut-edit-footer">
+              <button type="button" className="shortcut-edit-cancel" onClick={() => setEditShortcutsOpen(false)}>취소</button>
+              <button type="button" className="shortcut-edit-save" onClick={handleShortcutsSave}>저장</button>
+            </div>
+          </div>
+        </div>
+      )}
       <section className="hero-with-category">
         <aside className="category-sidebar">
-          <h3 className="category-title">전체카테고리</h3>
-          <ul className="category-menu">
-            {categories.map((c) => (
-              <li key={c.label}><Link to={c.to} className={c.color}>{c.label}</Link></li>
-            ))}
-          </ul>
+          <div className="category-main-wrap">
+            <h3 className="category-title">
+              바로가기
+              <button type="button" className="category-edit-btn" onClick={() => { setEditOrder([...shortcuts]); setEditShortcutsOpen(true); }} aria-label="바로가기 편집">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+            </h3>
+            <ul className="category-menu">
+              {categories.map((c, i) => (
+                <li key={c.id}>
+                  <Link to={c.to} className={c.color}>{c.label}</Link>
+                  {i === 0 && (
+                    <button type="button" className={`category-expand-btn ${categoryExpanded ? 'expanded' : ''}`} onClick={(e) => { e.preventDefault(); setCategoryExpanded(!categoryExpanded); }} aria-expanded={categoryExpanded} aria-label="카테고리 펼치기">
+                      <span className="category-expand-icon">&gt;</span>
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </aside>
+        {categoryExpanded && (
+          <div className="category-full-overlay">
+            <div className="category-full-panel">
+              <ul>
+                <li><Link to="/projects" onClick={() => setCategoryExpanded(false)}>전체</Link></li>
+                {['디자인', '개발', '마케팅', '글쓰기', '번역'].map((c) => (
+                  <li key={c}><Link to={`/projects?category=${c}`} onClick={() => setCategoryExpanded(false)}>{c}</Link></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
         <div className="banner-area">
           <div className="banner-carousel">
             {banners.map((b, i) => (
@@ -206,8 +322,8 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <Link to="/projects/new" className="cat-row-banner">
-          지금 의뢰 · 최대 20% 할인 · 지금 의뢰시 빠른 매칭
+        <Link to="/service/used-webapp" className="cat-row-banner">
+          인증 중고 앱 & 웹
         </Link>
       </section>
       <section className="reviews-section">

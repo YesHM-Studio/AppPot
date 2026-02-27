@@ -52,11 +52,19 @@ export default function Projects() {
           <div className="project-grid">
             {data.projects.map((p) => (
               <Link key={p.id} to={`/projects/${p.id}`} className="project-card">
-                <div className="card-thumb" style={p.thumbnail_url ? { backgroundImage: `url(${p.thumbnail_url})` } : {}} />
-                <span className="status-badge">{p.status}</span>
+                <div
+                  className="card-thumb"
+                  style={p.thumbnail_url ? { backgroundImage: `url(${p.thumbnail_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
+                />
+                {!p.is_commission && <span className="status-badge">{p.status}</span>}
                 <h3>{p.title}</h3>
                 <p className="meta">{p.client_name} · {p.category}</p>
-                <p className="budget">{(p.is_commission ? (p.start_price ?? p.budget) : p.budget)?.toLocaleString()}원</p>
+                <p className="budget">
+                  {(p.is_commission ? 220000 : (p.budget ?? 0))?.toLocaleString()}원
+                  {p.is_commission && (
+                    <span className="budget-tooltip" data-tooltip="풀 옵션 선택 시 220,000원" title="풀 옵션 선택 시 220,000원">?</span>
+                  )}
+                </p>
               </Link>
             ))}
           </div>

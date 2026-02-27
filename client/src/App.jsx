@@ -14,6 +14,8 @@ import MyPage from './pages/MyPage';
 import Chat from './pages/Chat';
 import Admin from './pages/Admin';
 import FindPassword from './pages/FindPassword';
+import Community from './pages/Community';
+import UsedWebApp from './pages/UsedWebApp';
 
 function ProtectedRoute({ children, requireAdmin }) {
   const { user, loading } = useAuth();
@@ -36,6 +38,8 @@ export default function App() {
         <Route path="projects/new" element={<ProtectedRoute><ProjectCreate /></ProtectedRoute>} />
         <Route path="projects/:id" element={<ProjectDetail />} />
         <Route path="sellers" element={<SellersComingSoon />} />
+        <Route path="community" element={<Community />} />
+        <Route path="service/used-webapp" element={<UsedWebApp />} />
         <Route path="sellers/:id" element={<SellerDetail />} />
         <Route path="mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
         <Route path="chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />

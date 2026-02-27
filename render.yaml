@@ -1,11 +1,20 @@
+# Render 배포 설정 - AppPot
+# https://dashboard.render.com → New → Web Service → 저장소 연결 후 자동 적용
+
 services:
   - type: web
     name: apppot
-    previews:
-      generation: automatic
-    env: node
+    runtime: node
+
+    # 빌드: 의존성 설치 + 클라이언트 빌드
     buildCommand: npm run install:all && npm run build
+
+    # 실행
     startCommand: npm start
+
+    # 헬스체크
+    healthCheckPath: /health
+
     envVars:
       - key: NODE_ENV
         value: production

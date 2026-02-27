@@ -101,6 +101,9 @@ export default function Layout() {
       </main>
       <footer className="gmarket-footer">
         <div className="footer-inner">
+          <div className="footer-brand">
+            <Link to="/" className="footer-logo">AppPot</Link>
+          </div>
           <div className="footer-info">
             <p className="footer-line">상호 : PixelStudio | 대표자명 : 강숙희</p>
             <p className="footer-line">사업자등록번호 : 424-11-02587 | 통신판매업신고번호 : 제 2023-대전유성-1254호</p>

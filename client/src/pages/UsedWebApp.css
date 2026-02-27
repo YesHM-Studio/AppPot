@@ -1,0 +1,136 @@
+.used-webapp-page {
+  min-height: 100vh;
+  background: #fafafa;
+}
+
+.used-webapp-hero {
+  background: linear-gradient(135deg, #26a69a 0%, #00897b 50%, #00695c 100%);
+  color: white;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.used-webapp-hero-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.used-webapp-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.used-webapp-hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.used-webapp-desc {
+  font-size: 1rem;
+  opacity: 0.95;
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+
+.used-webapp-cta {
+  display: inline-block;
+  padding: 14px 32px;
+  background: white;
+  color: #00695c;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.used-webapp-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.used-webapp-features {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 56px 24px;
+}
+
+.used-webapp-features h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 32px;
+  text-align: center;
+}
+
+.used-webapp-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.used-webapp-feature-card {
+  background: #fff;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s;
+}
+
+.used-webapp-feature-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.used-webapp-feature-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.used-webapp-feature-card h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 10px;
+}
+
+.used-webapp-feature-card p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.used-webapp-cta-section {
+  text-align: center;
+  padding: 48px 24px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.used-webapp-cta-section p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 20px;
+}
+
+.used-webapp-cta-secondary {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--primary, #26a69a);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.used-webapp-cta-secondary:hover {
+  opacity: 0.9;
+}

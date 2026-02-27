@@ -160,9 +160,14 @@ export default function ProjectDetail() {
                 <ul className="option-includes-list">
                   {currentTier?.items?.map((item, i) => {
                     const label = typeof item === 'string' ? item : item.label;
-                    const tooltip = typeof item === 'object' && item?.tooltip;
+                    const tooltip = (typeof item === 'object' && item?.tooltip) || (label === '수정 3회' ? '버그 수정 제외. 단순 변심만 횟수에 포함됩니다.' : null);
                     return (
-                      <li key={i}>{label}{tooltip && <span className="option-tooltip" data-tooltip={tooltip} aria-label={tooltip}>?</span>}</li>
+                      <li key={i}>
+                        <span>{label}</span>
+                        {tooltip && (
+                          <span className="option-tooltip" data-tooltip={tooltip} title={tooltip} aria-label={tooltip}>?</span>
+                        )}
+                      </li>
                     );
                   }) ?? []}
                 </ul>

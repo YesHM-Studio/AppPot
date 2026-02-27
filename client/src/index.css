@@ -1,13 +1,47 @@
 :root {
-  --primary: #4db6ac;
-  --primary-light: #80cbc4;
-  --primary-bg: #e0f2f1;
-  --accent: #26a69a;
-  --text: #333;
-  --text-light: #777;
-  --border: #eee;
-  --white: #fff;
-  --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  /* 밝고 부드러운 현대적 팔레트 - 토스/모바일앱 스타일 */
+  --primary: #3182F6;
+  --primary-light: #6BA3F7;
+  --primary-dark: #1B64DA;
+  --primary-bg: #F2F7FF;
+  --primary-muted: rgba(49, 130, 246, 0.06);
+  --accent: #4E65F3;
+  
+  /* Header - 밝은 배경 */
+  --header-bg: #ffffff;
+  --header-text: #191F28;
+  
+  /* Neutrals - 부드러운 회색 톤 */
+  --text: #333D4B;
+  --text-secondary: #6B7684;
+  --text-light: #8B95A1;
+  --border: #E5E8EB;
+  --border-light: #F2F4F6;
+  --white: #ffffff;
+  --bg: #F9FAFB;
+  --bg-elevated: #ffffff;
+  
+  /* Shadows - 은은한 그림자 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-primary: 0 4px 16px rgba(49, 130, 246, 0.2);
+  
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.2s var(--ease-out);
+  --transition-base: 0.25s var(--ease-out);
+  --transition-slow: 0.35s var(--ease-out);
 }
 
 * {
@@ -17,16 +51,20 @@
 }
 
 body {
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
 button {
@@ -36,4 +74,9 @@ button {
 
 input, select, textarea {
   font-family: inherit;
+}
+
+::selection {
+  background: var(--primary-muted);
+  color: var(--primary);
 }

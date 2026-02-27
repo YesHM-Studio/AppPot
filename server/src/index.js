@@ -35,10 +35,29 @@ if (!adminExists) {
 
 // 디자인 커미션 생성/업데이트
 const COMMISSION_OPTIONS = JSON.stringify({
-  general: { price: 150000, items: ['메인 1종 + 부가 화면 10종', '기본 컬러 가이드 포함', '수정 3회', '빠르고 확실한 MVP용 디자인'], desc: '메인 1종 + 부가 화면 10종, 기본 컬러 가이드 포함. 수정 3회, 빠르고 확실한 MVP용 디자인.' },
-  plus: { price: 170000, items: ['메인 1종 + 부가 화면 50종', '팝업창 무제한', '브랜드 가이드·소셜 로그인 UI 포함', '수정 무제한'], desc: '메인 1종 + 부가 화면 50종, 팝업창 무제한. 브랜드 가이드·소셜 로그인 UI 포함, 수정 무제한.' },
-  optional: [{ id: 0, label: '브랜드 컬러·타이포 가이드', price: 0 }, { id: 1, label: '소셜 로그인 UI', price: 0 }],
-  optionalPlus: [{ id: 0, label: '스플래시·로딩 화면', price: 0 }, { id: 1, label: '다크 모드 UI', price: 0 }]
+  general: {
+    price: 150000,
+    items: [
+      '메인 1종 + 부가 화면 10종',
+      '기본 컬러 가이드 포함',
+      { label: '수정 3회', tooltip: '버그 수정 제외. 단순 변심만 횟수에 포함됩니다.' },
+      '빠르고 확실한 MVP용 디자인'
+    ],
+    desc: '메인 1종 + 부가 화면 10종, 기본 컬러 가이드 포함. 수정 3회, 빠르고 확실한 MVP용 디자인.'
+  },
+  plus: {
+    price: 170000,
+    items: ['메인 1종 + 부가 화면 50종', '팝업창 무제한', '브랜드 가이드·소셜 로그인 UI 포함', '수정 무제한'],
+    desc: '메인 1종 + 부가 화면 50종, 팝업창 무제한. 브랜드 가이드·소셜 로그인 UI 포함, 수정 무제한.'
+  },
+  optional: [
+    { id: 0, label: '브랜드 컬러·타이포 가이드', price: 25000 },
+    { id: 1, label: '소셜 로그인 UI', price: 25000 }
+  ],
+  optionalPlus: [
+    { id: 0, label: '스플래시·로딩 화면', price: 45000 },
+    { id: 1, label: '다크 모드 UI', price: 5000 }
+  ]
 });
 const adminId = db.prepare('SELECT id FROM users WHERE role = ?').get('admin')?.id;
 if (adminId) {

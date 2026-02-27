@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import db from '../db/index.js';
@@ -8,6 +9,18 @@ import { v4 as uuidv4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const COMMISSION_OPTIONS_PATH = path.join(__dirname, '../../data/commission-options.json');
+
+function getCommissionOptions() {
+  try {
+    if (fs.existsSync(COMMISSION_OPTIONS_PATH)) {
+      const raw = fs.readFileSync(COMMISSION_OPTIONS_PATH, 'utf8');
+      return JSON.parse(raw);
+    }
+  } catch (_) {}
+  return null;
+}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -62,7 +75,12 @@ router.get('/:id', (req, res) => {
     LEFT JOIN seller_profiles sp ON sp.user_id = u.id
     WHERE e.project_id = ?
   `).all(project.id);
-  res.json({ ...project, client_name: clientName, files, estimates });
+  const out = { ...project, client_name: clientName, files, estimates };
+  if (project.is_commission) {
+    const opts = getCommissionOptions();
+    if (opts) out.options_json = JSON.stringify(opts);
+  }
+  res.json(out);
 });
 
 router.post('/', authMiddleware, upload.array('files', 5), (req, res) => {

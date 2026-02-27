@@ -1,0 +1,34 @@
+.community-blog {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  background: #fafafa;
+}
+.community-header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #eee; }
+.community-title { font-size: 1.75rem; font-weight: 700; color: #333; margin-bottom: 8px; }
+.community-desc { font-size: 0.95rem; color: #666; }
+.community-layout { display: grid; grid-template-columns: 1fr 220px; gap: 32px; }
+@media (max-width: 768px) { .community-layout { grid-template-columns: 1fr; } }
+.community-main { min-width: 0; }
+.community-post-list { list-style: none; margin: 0; padding: 0; }
+.community-post-item { margin-bottom: 16px; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.community-post-link { display: flex; padding: 20px; gap: 20px; transition: background 0.2s; }
+.community-post-link:hover { background: #f9f9f9; }
+.community-post-thumb {
+  width: 120px; height: 90px; flex-shrink: 0;
+  background: #f0f0f0; border-radius: 6px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.community-post-thumb-placeholder { font-size: 2rem; }
+.community-post-body { flex: 1; min-width: 0; }
+.community-post-category { display: inline-block; font-size: 0.75rem; color: #03c75a; font-weight: 600; margin-bottom: 6px; }
+.community-post-title { font-size: 1.1rem; font-weight: 600; color: #333; margin: 0 0 8px; line-height: 1.4; }
+.community-post-excerpt { font-size: 0.9rem; color: #666; margin: 0 0 8px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.community-post-date { font-size: 0.8rem; color: #999; }
+.community-sidebar { position: sticky; top: 100px; height: fit-content; }
+.community-sidebar-block { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 16px; }
+.community-sidebar-block h4 { font-size: 0.9rem; font-weight: 600; color: #333; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 2px solid #03c75a; }
+.community-category-list { list-style: none; margin: 0; padding: 0; }
+.community-category-list li { margin-bottom: 8px; }
+.community-category-list a { font-size: 0.9rem; color: #555; transition: color 0.2s; }
+.community-category-list a:hover { color: #03c75a; }

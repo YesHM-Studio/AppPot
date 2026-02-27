@@ -38,8 +38,6 @@
 
 .detail-sidebar-scroll {
   padding: 24px;
-  max-height: calc(100vh - 220px);
-  overflow-y: auto;
 }
 
 .detail-sidebar .detail-header {
@@ -52,16 +50,25 @@
 }
 
 .option-tier-row {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.detail-sidebar .description {
+  margin: 0 0 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .option-tier-label,
 .option-includes-label,
 .option-select-label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--text-light);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .option-tier-chips {
@@ -86,48 +93,78 @@
   color: var(--primary);
 }
 
+.option-includes {
+  margin-bottom: 20px;
+}
+
 .option-includes-list {
   list-style: none;
-  margin: 0 0 16px 0;
+  margin: 0;
   padding: 0;
 }
 
 .option-includes-list li {
-  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 8px 0;
   font-size: 0.9rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.option-includes-list li:last-child {
+  border-bottom: none;
+}
+
+.option-tooltip {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-light);
+  background: #e0e0e0;
+  border-radius: 50%;
+  cursor: help;
+}
+
+.option-tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(-6px);
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #fff;
+  background: #333;
+  border-radius: 8px;
+  max-width: 220px;
+  white-space: normal;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .option-select-row {
-  margin: 16px 0;
+  margin: 20px 0 16px;
 }
 
 .option-select-grid {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 8px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 8px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.option-select-grid::-webkit-scrollbar {
-  height: 6px;
-}
-
-.option-select-grid::-webkit-scrollbar-track {
-  background: #f0f0f0;
-  border-radius: 3px;
-}
-
-.option-select-grid::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .option-select-chip {
-  flex-shrink: 0;
-  padding: 8px 14px;
+  width: 100%;
+  padding: 12px 16px;
   border: 1px solid var(--border);
   background: var(--white);
   border-radius: 8px;

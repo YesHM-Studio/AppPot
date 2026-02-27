@@ -10,7 +10,7 @@ export const FEATURED_SERVICES = [
     desc: '30일 만에 출시하는 프로덕션 수준 앱',
     stars: 5,
     image: imgApp,
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    gradient: 'linear-gradient(135deg, #3182F6 0%, #6BA3F7 100%)',
     to: '/projects?category=개발',
   },
   {
@@ -20,7 +20,7 @@ export const FEATURED_SERVICES = [
     desc: '클린하고 모던한 앱 화면 디자인, 브랜드 컬러·다크모드',
     stars: 5,
     image: imgDesign,
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    gradient: 'linear-gradient(135deg, #4E65F3 0%, #7C8EF7 100%)',
     to: '/projects?category=디자인',
   },
   {
@@ -30,7 +30,7 @@ export const FEATURED_SERVICES = [
     desc: '30일 내 로그인·결제까지 완성',
     stars: 5,
     image: imgWeb,
-    gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    gradient: 'linear-gradient(135deg, #3182F6 0%, #93C5FD 100%)',
     to: '/projects?category=개발',
   },
 ];
