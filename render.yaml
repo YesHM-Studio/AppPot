@@ -6,8 +6,8 @@ services:
     name: apppot
     runtime: node
 
-    # 빌드 (postinstall이 server/client 의존성 자동 설치)
-    buildCommand: npm run build
+    # 빌드: 의존성 설치 후 클라이언트 빌드
+    buildCommand: npm run install:all && npm run build
 
     # 실행
     startCommand: npm start

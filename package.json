@@ -8,7 +8,6 @@
     "dev:safe": "ulimit -n 10240 2>/dev/null; concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && NODE_ENV=development npm run dev",
     "dev:client": "cd client && npm run dev",
-    "postinstall": "cd server && npm install && cd ../client && npm install",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
     "build": "cd client && npm run build && rm -rf ../server/public && mkdir -p ../server/public && cp -r dist/* ../server/public",
     "start": "node server/src/index.js",
