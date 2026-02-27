@@ -22,6 +22,7 @@ async function init() {
   } else {
     db = new SQL.Database();
     initDb(db);
+    migrate(db);  // 새 DB에도 migrate 적용 (is_commission 등 컬럼 추가)
     save();
   }
 }
