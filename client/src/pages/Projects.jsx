@@ -52,10 +52,20 @@ export default function Projects() {
           <div className="project-grid">
             {data.projects.map((p) => (
               <Link key={p.id} to={`/projects/${p.id}`} className="project-card">
-                <div
-                  className="card-thumb"
-                  style={p.thumbnail_url ? { backgroundImage: `url(${p.thumbnail_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
-                />
+                <div className="card-thumb">
+                  {p.thumbnail_url ? (
+                    <img
+                      src={p.thumbnail_url}
+                      alt=""
+                      className="card-thumb-img"
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        e.currentTarget.remove();
+                      }}
+                    />
+                  ) : null}
+                </div>
                 {!p.is_commission && <span className="status-badge">{p.status}</span>}
                 <h3>{p.title}</h3>
                 <p className="meta">{p.client_name} · {p.category}</p>

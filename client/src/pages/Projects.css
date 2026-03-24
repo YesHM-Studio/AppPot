@@ -120,6 +120,15 @@
 .card-thumb {
   height: 140px;
   background: linear-gradient(135deg, var(--primary-bg) 0%, #e1f5fe 100%);
+  overflow: hidden;
+}
+
+.card-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .project-card > h3, .project-card > .meta, .project-card > .budget {
