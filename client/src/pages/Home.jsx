@@ -323,7 +323,7 @@ export default function Home() {
           ))}
         </div>
         <Link to="/service/used-webapp" className="cat-row-banner">
-          인증 중고 앱 & 웹
+          운영 중 서비스 매물
         </Link>
       </section>
       <section className="reviews-section">
@@ -359,6 +359,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* 인기 많은 의뢰 섹션 — 숨김 (삭제 아님)
       <section className="product-section">
         <div className="section-head">
           <h2>인기 많은 의뢰</h2>
@@ -377,6 +378,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      */}
     </div>
   );
 }

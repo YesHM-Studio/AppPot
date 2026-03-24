@@ -117,7 +117,6 @@
 }
 
 .option-tooltip {
-  position: relative;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -125,31 +124,64 @@
   width: 18px;
   height: 18px;
   margin-left: 6px;
+  padding: 0;
+  border: none;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-light);
   background: #e0e0e0;
   border-radius: 50%;
-  cursor: help;
+  cursor: pointer;
+  line-height: 1;
 }
 
-.option-tooltip:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  transform: translateX(-50%) translateY(-6px);
-  padding: 8px 12px;
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: #fff;
-  background: #333;
-  border-radius: 8px;
-  max-width: 220px;
-  white-space: normal;
+.option-tooltip:hover {
+  background: #d0d0d0;
+}
+
+.option-help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.option-help-dialog {
+  width: 100%;
+  max-width: 340px;
+  padding: 24px 22px 20px;
+  background: var(--white, #fff);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.option-help-text {
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text, #333);
   text-align: center;
-  z-index: 10;
-  pointer-events: none;
+}
+
+.option-help-close {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary, #26a69a);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.option-help-close:hover {
+  opacity: 0.92;
 }
 
 .option-select-row {

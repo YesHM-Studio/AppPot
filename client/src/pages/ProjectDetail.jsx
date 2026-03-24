@@ -14,6 +14,7 @@ export default function ProjectDetail() {
   const [estimateForm, setEstimateForm] = useState({ amount: '', message: '', delivery_days: '' });
   const optionSelectRef = useRef(null);
   const purchaseBtnRef = useRef(null);
+  const [optionHelpOpen, setOptionHelpOpen] = useState(false);
 
   useEffect(() => {
     axios.get(`/api/projects/${id}`).then(({ data }) => setProject(data)).catch(() => setProject(null));
@@ -165,7 +166,14 @@ export default function ProjectDetail() {
                       <li key={i}>
                         <span>{label}</span>
                         {tooltip && (
-                          <span className="option-tooltip" data-tooltip={tooltip} title={tooltip} aria-label={tooltip}>?</span>
+                          <button
+                            type="button"
+                            className="option-tooltip"
+                            aria-label="수정 횟수 안내"
+                            onClick={() => setOptionHelpOpen(true)}
+                          >
+                            ?
+                          </button>
                         )}
                       </li>
                     );
@@ -222,6 +230,20 @@ export default function ProjectDetail() {
             </button>
           </div>
         </aside>
+        {optionHelpOpen && (
+          <div className="option-help-overlay" role="dialog" aria-modal="true" aria-labelledby="option-help-title" onClick={() => setOptionHelpOpen(false)}>
+            <div className="option-help-dialog" onClick={(e) => e.stopPropagation()}>
+              <p id="option-help-title" className="option-help-text">
+                단순 변심만 횟수에 추가 됩니다.
+                <br />
+                (버그 수정 제외.)
+              </p>
+              <button type="button" className="option-help-close" onClick={() => setOptionHelpOpen(false)}>
+                확인
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
