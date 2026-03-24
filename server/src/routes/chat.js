@@ -21,6 +21,18 @@ const chatUpload = multer({
 const router = Router();
 
 router.get('/rooms', authMiddleware, (req, res) => {
+  if (req.user.role === 'admin') {
+    const rooms = db.prepare(`
+      SELECT cr.*, p.title as project_title, p.id as project_id,
+      u1.name as client_name, u2.name as seller_name
+      FROM chat_rooms cr
+      JOIN projects p ON cr.project_id = p.id
+      JOIN users u1 ON cr.client_id = u1.id
+      JOIN users u2 ON cr.seller_id = u2.id
+      ORDER BY cr.created_at DESC
+    `).all();
+    return res.json(rooms);
+  }
   const rooms = db.prepare(`
     SELECT cr.*, p.title as project_title, p.id as project_id,
     u1.name as client_name, u2.name as seller_name
@@ -36,7 +48,8 @@ router.get('/rooms', authMiddleware, (req, res) => {
 router.get('/rooms/:roomId/messages', authMiddleware, (req, res) => {
   const room = db.prepare('SELECT * FROM chat_rooms WHERE id = ?').get(req.params.roomId);
   if (!room) return res.status(404).json({ error: '채팅방을 찾을 수 없습니다.' });
-  if (room.client_id !== req.user.id && room.seller_id !== req.user.id) {
+  const isParticipant = room.client_id === req.user.id || room.seller_id === req.user.id;
+  if (!isParticipant && req.user.role !== 'admin') {
     return res.status(403).json({ error: '접근 권한이 없습니다.' });
   }
   const messages = db.prepare(`
@@ -101,6 +114,43 @@ router.post('/rooms/commission-inquiry', authMiddleware, (req, res) => {
     db.prepare('INSERT INTO chat_messages (id, room_id, sender_id, content) VALUES (?, ?, ?, ?)')
       .run(msgId, room.id, buyerId, summary);
   }
+
+  res.json(room);
+});
+
+const MARKETPLACE_INQUIRY_PROJECT_ID = 'marketplace-listings-inquiry';
+
+/** 매물장 예시 매물 문의: 매 클릭마다 메시지 추가, 관리자와 동일 채팅 스레드 */
+router.post('/rooms/marketplace-inquiry', authMiddleware, (req, res) => {
+  const { inquiry } = req.body;
+  const project = db.prepare('SELECT * FROM projects WHERE id = ?').get(MARKETPLACE_INQUIRY_PROJECT_ID);
+  if (!project) {
+    return res.status(500).json({ error: '매물장 문의가 아직 설정되지 않았습니다. 서버를 한 번 재시작해 주세요.' });
+  }
+
+  const admin = db.prepare(`SELECT id FROM users WHERE role = 'admin' ORDER BY created_at ASC LIMIT 1`).get();
+  if (!admin) return res.status(500).json({ error: '관리자 계정이 없습니다.' });
+
+  const buyerId = req.user.id;
+  if (buyerId === admin.id) {
+    return res.status(400).json({ error: '관리자 계정으로는 문의 채팅을 열 수 없습니다.' });
+  }
+
+  let room = db.prepare(
+    'SELECT * FROM chat_rooms WHERE project_id = ? AND client_id = ? AND seller_id = ?'
+  ).get(MARKETPLACE_INQUIRY_PROJECT_ID, buyerId, admin.id);
+
+  if (!room) {
+    const id = uuidv4();
+    db.prepare('INSERT INTO chat_rooms (id, project_id, client_id, seller_id) VALUES (?, ?, ?, ?)')
+      .run(id, MARKETPLACE_INQUIRY_PROJECT_ID, buyerId, admin.id);
+    room = db.prepare('SELECT * FROM chat_rooms WHERE id = ?').get(id);
+  }
+
+  const text = (inquiry && String(inquiry).trim()) || '[매물 문의]';
+  const msgId = uuidv4();
+  db.prepare('INSERT INTO chat_messages (id, room_id, sender_id, content) VALUES (?, ?, ?, ?)')
+    .run(msgId, room.id, buyerId, text);
 
   res.json(room);
 });

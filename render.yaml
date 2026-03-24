@@ -20,3 +20,7 @@ services:
         value: production
       - key: NODE_OPTIONS
         value: --max-old-space-size=460
+      - key: ADMIN_LOGIN
+        value: nihno3911
+      - key: ADMIN_PASSWORD
+        value: dosa1004

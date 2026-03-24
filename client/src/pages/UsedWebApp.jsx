@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './UsedWebApp.css';
 
 const FILTERS = ['전체', '웹', '앱', '콘텐츠·미디어'];
@@ -55,13 +56,44 @@ const LISTINGS = [
   },
 ];
 
+function buildInquiryMessage(item) {
+  const lines = [
+    `[매물 문의] ${item.name}`,
+    `유형: ${item.type}${item.tag ? ` · ${item.tag}` : ''}`,
+    item.desc,
+    item.stat,
+  ];
+  return lines.filter(Boolean).join('\n');
+}
+
 export default function UsedWebApp() {
   const [filter, setFilter] = useState('전체');
+  const [loadingId, setLoadingId] = useState(null);
+  const { user, api } = useAuth();
+  const navigate = useNavigate();
 
   const filtered =
     filter === '전체'
       ? LISTINGS
       : LISTINGS.filter((l) => l.type === filter);
+
+  const handleInquiry = async (item) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    setLoadingId(item.id);
+    try {
+      const { data } = await api.post('/api/chat/rooms/marketplace-inquiry', {
+        inquiry: buildInquiryMessage(item),
+      });
+      navigate(`/chat?room=${data.id}`);
+    } catch (err) {
+      alert(err.response?.data?.error || '채팅을 열 수 없습니다.');
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   return (
     <div className="op-market-page">
@@ -110,8 +142,13 @@ export default function UsedWebApp() {
               <h2 className="op-market-card-title">{item.name}</h2>
               <p className="op-market-card-desc">{item.desc}</p>
               <p className="op-market-card-stat">{item.stat}</p>
-              <button type="button" className="op-market-card-cta" disabled>
-                상세·문의 (준비 중)
+              <button
+                type="button"
+                className="op-market-card-cta"
+                disabled={loadingId === item.id}
+                onClick={() => handleInquiry(item)}
+              >
+                {loadingId === item.id ? '연결 중…' : '구매·문의하기'}
               </button>
             </li>
           ))}

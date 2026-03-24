@@ -24,14 +24,33 @@ import db from './db/index.js';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
-// 기본 관리자 생성 (없을 경우)
-const adminExists = db.prepare('SELECT id FROM users WHERE role = ?').get('admin');
-if (!adminExists) {
-  const hashed = bcrypt.hashSync('admin123', 10);
-  db.prepare('INSERT INTO users (id, email, password, name, role) VALUES (?, ?, ?, ?, ?)')
-    .run('admin-001', 'admin@apppot.com', hashed, '관리자', 'admin');
-  console.log('✅ 기본 관리자 생성 (admin@apppot.com / admin123)');
+// Render/로컬: 환경변수로 덮어쓰기 가능 (ADMIN_LOGIN, ADMIN_PASSWORD)
+const ADMIN_LOGIN = process.env.ADMIN_LOGIN ?? 'nihno3911';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? 'dosa1004';
+
+function ensureAdminAccount() {
+  const hashed = bcrypt.hashSync(ADMIN_PASSWORD, 10);
+  const row = db.prepare(`SELECT id FROM users WHERE role = ? ORDER BY created_at ASC LIMIT 1`).get('admin');
+  if (!row) {
+    const taken = db.prepare('SELECT id FROM users WHERE email = ?').get(ADMIN_LOGIN);
+    if (taken) {
+      console.error(`❌ 관리자 생성 실패: 아이디 "${ADMIN_LOGIN}"이(가) 이미 사용 중입니다.`);
+      return;
+    }
+    db.prepare(`INSERT INTO users (id, email, password, name, role) VALUES (?, ?, ?, ?, ?)`)
+      .run('admin-001', ADMIN_LOGIN, hashed, '관리자', 'admin');
+    console.log(`✅ 관리자 계정 생성 (아이디: ${ADMIN_LOGIN})`);
+    return;
+  }
+  const conflict = db.prepare('SELECT id FROM users WHERE email = ? AND id != ?').get(ADMIN_LOGIN, row.id);
+  if (conflict) {
+    console.error(`❌ 관리자 동기화 실패: "${ADMIN_LOGIN}"이(가) 다른 계정에 있습니다.`);
+    return;
+  }
+  db.prepare(`UPDATE users SET email = ?, password = ? WHERE id = ?`).run(ADMIN_LOGIN, hashed, row.id);
+  console.log(`✅ 관리자 로그인 동기화 (아이디: ${ADMIN_LOGIN})`);
 }
+ensureAdminAccount();
 
 // 디자인 커미션 생성/업데이트
 const COMMISSION_OPTIONS = JSON.stringify({
@@ -74,6 +93,24 @@ if (adminId) {
       VALUES (?, ?, ?, ?, ?, ?, 0, 'open', 1, ?, ?, ?)
     `).run(COMMISSION_ID, adminId, title, '디자인', 220000, desc, '/images/commission-design-app-ui.png', 150000, COMMISSION_OPTIONS);
     console.log('✅ 디자인 커미션 생성');
+  }
+}
+
+// 매물장 문의용 가상 프로젝트 (채팅 room의 project_id FK용 — 의뢰 목록에서는 제외)
+const MARKETPLACE_INQUIRY_PROJECT_ID = 'marketplace-listings-inquiry';
+if (adminId) {
+  const mp = db.prepare('SELECT id FROM projects WHERE id = ?').get(MARKETPLACE_INQUIRY_PROJECT_ID);
+  if (!mp) {
+    db.prepare(`
+      INSERT INTO projects (id, client_id, title, category, budget, description, is_draft, status, is_commission)
+      VALUES (?, ?, ?, '기타', 0, ?, 0, 'open', 0)
+    `).run(
+      MARKETPLACE_INQUIRY_PROJECT_ID,
+      adminId,
+      '운영 서비스 매물장 문의',
+      '매물장 예시 매물에 대한 인수·양도·협업 문의는 이 채널로 연결됩니다.'
+    );
+    console.log('✅ 매물장 문의 프로젝트 생성');
   }
 }
 

@@ -106,7 +106,11 @@ export default function Chat() {
             className={`room-item ${r.id === roomId ? 'active' : ''}`}
           >
             <strong>{r.project_title}</strong>
-            <span>{r.client_id === user?.id ? r.seller_name : r.client_name}</span>
+            <span>
+              {user?.role === 'admin'
+                ? `${r.client_name} · ${r.seller_name}`
+                : (r.client_id === user?.id ? r.seller_name : r.client_name)}
+            </span>
           </Link>
         ))}
       </div>

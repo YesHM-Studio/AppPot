@@ -41,18 +41,20 @@ router.get('/commission/design', (req, res) => {
   res.json({ id: p.id });
 });
 
+const MARKETPLACE_INQUIRY_PROJECT_ID = 'marketplace-listings-inquiry';
+
 router.get('/', (req, res) => {
   const { status, category, page = 1, limit = 12 } = req.query;
-  let sql = 'SELECT p.*, u.name as client_name FROM projects p JOIN users u ON p.client_id = u.id WHERE 1=1';
-  const params = [];
+  let sql = 'SELECT p.*, u.name as client_name FROM projects p JOIN users u ON p.client_id = u.id WHERE 1=1 AND p.id != ?';
+  const params = [MARKETPLACE_INQUIRY_PROJECT_ID];
   if (status) { sql += ' AND p.status = ?'; params.push(status); }
   if (category) { sql += ' AND p.category = ?'; params.push(category); }
   sql += ' ORDER BY p.created_at DESC LIMIT ? OFFSET ?';
   params.push(parseInt(limit), (parseInt(page) - 1) * parseInt(limit));
   const rows = db.prepare(sql).all(...params);
   const projects = rows.map((p) => ({ ...p, client_name: (p.is_commission ? 'AppPot' : p.client_name) || 'AppPot' }));
-  let countSql = 'SELECT COUNT(*) as c FROM projects WHERE 1=1';
-  const countParams = [];
+  let countSql = 'SELECT COUNT(*) as c FROM projects WHERE 1=1 AND id != ?';
+  const countParams = [MARKETPLACE_INQUIRY_PROJECT_ID];
   if (status) { countSql += ' AND status = ?'; countParams.push(status); }
   if (category) { countSql += ' AND category = ?'; countParams.push(category); }
   const { c } = db.prepare(countSql).get(...countParams) || {};
