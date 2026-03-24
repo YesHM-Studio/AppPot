@@ -220,10 +220,20 @@ export default function ProjectDetail() {
               type="button"
               className="detail-purchase-btn"
               ref={purchaseBtnRef}
-              onClick={() => {
+              onClick={async () => {
                 if (!user) { navigate('/login'); return; }
-                alert('PG 연동 준비 중입니다. 채팅으로 문의해 주세요.');
-                navigate('/chat');
+                const tierLabel = selectedTier === 'general' ? '일반' : '플러스';
+                const optLabels = selectedOptionalItems.map((o) => o.label || o).filter(Boolean).join(', ');
+                const purchase_summary = `[구매 문의] ${project.title} — 총 ${totalPrice.toLocaleString()}원 (${tierLabel}${optLabels ? ` · 추가: ${optLabels}` : ''})`;
+                try {
+                  const { data } = await api.post('/api/chat/rooms/commission-inquiry', {
+                    project_id: id,
+                    purchase_summary,
+                  });
+                  navigate(`/chat?room=${data.id}`);
+                } catch (err) {
+                  alert(err.response?.data?.error || '채팅방을 열 수 없습니다.');
+                }
               }}
             >
               총 {totalPrice.toLocaleString()}원 구매하기

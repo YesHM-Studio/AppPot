@@ -64,6 +64,47 @@ router.post('/rooms', authMiddleware, (req, res) => {
   res.json(room);
 });
 
+/** 커미션 상품 구매 문의: 구매자(client_id) ↔ 관리자(seller_id). 관리자는 채팅 목록에서 동일하게 수신 */
+router.post('/rooms/commission-inquiry', authMiddleware, (req, res) => {
+  const { project_id, purchase_summary } = req.body;
+  if (!project_id) return res.status(400).json({ error: 'project_id가 필요합니다.' });
+
+  const project = db.prepare('SELECT * FROM projects WHERE id = ?').get(project_id);
+  if (!project) return res.status(404).json({ error: '프로젝트를 찾을 수 없습니다.' });
+  if (project.is_commission !== 1) {
+    return res.status(400).json({ error: '커미션 상품만 구매 문의 채팅을 열 수 있습니다.' });
+  }
+
+  const admin = db.prepare(`SELECT id FROM users WHERE role = 'admin' ORDER BY created_at ASC LIMIT 1`).get();
+  if (!admin) return res.status(500).json({ error: '관리자 계정이 없습니다.' });
+
+  const buyerId = req.user.id;
+  if (buyerId === admin.id) {
+    return res.status(400).json({ error: '관리자 계정으로는 구매 문의 채팅을 열 수 없습니다. 일반 회원으로 로그인해 주세요.' });
+  }
+
+  let room = db.prepare(
+    'SELECT * FROM chat_rooms WHERE project_id = ? AND client_id = ? AND seller_id = ?'
+  ).get(project_id, buyerId, admin.id);
+
+  const isNew = !room;
+  if (isNew) {
+    const id = uuidv4();
+    db.prepare('INSERT INTO chat_rooms (id, project_id, client_id, seller_id) VALUES (?, ?, ?, ?)')
+      .run(id, project_id, buyerId, admin.id);
+    room = db.prepare('SELECT * FROM chat_rooms WHERE id = ?').get(id);
+  }
+
+  const summary = (purchase_summary && String(purchase_summary).trim()) || `[구매 문의] ${project.title}`;
+  if (isNew) {
+    const msgId = uuidv4();
+    db.prepare('INSERT INTO chat_messages (id, room_id, sender_id, content) VALUES (?, ?, ?, ?)')
+      .run(msgId, room.id, buyerId, summary);
+  }
+
+  res.json(room);
+});
+
 router.post('/upload', authMiddleware, chatUpload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: '파일이 없습니다.' });
   res.json({ url: `/uploads/${req.file.filename}`, filename: req.file.originalname || req.file.filename });

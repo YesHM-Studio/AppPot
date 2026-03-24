@@ -17,8 +17,9 @@ export default function Chat() {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    api.get('/api/chat/rooms').then(({ data }) => setRooms(data));
-  }, []);
+    if (!user) return;
+    api.get('/api/chat/rooms').then(({ data }) => setRooms(data)).catch(() => setRooms([]));
+  }, [user, roomId]);
 
   useEffect(() => {
     if (roomId) {

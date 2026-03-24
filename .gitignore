@@ -9,4 +9,5 @@ server/public/
 .chrome-dev-session/
 .cursor/
 .vscode/
-public/
+# repo 루트의 public만 무시 (Vite 정적 파일은 client/public 에 두고 추적)
+/public/
